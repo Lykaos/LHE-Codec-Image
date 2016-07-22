@@ -3,12 +3,11 @@
 
 import huff, math, struct, os
 from PIL import Image
-from numpy import zeros
 from array import *
 
-# ---------------
-# BINARY DECODER |
-# ---------------
+# ---------------#
+# BINARY DECODER #
+# ---------------#
 
 def getData(lhe_file): # Get all the data from an lhe_file
 

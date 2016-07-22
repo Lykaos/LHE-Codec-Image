@@ -12,14 +12,14 @@ from image_dec import *
 from Aux.huff import *
 from Aux.psnr import *
 
-# -------------------------
-# CODING/DECODING EXAMPLE |
-# -------------------------
+# ------------------------#
+# CODING/DECODING EXAMPLE #
+# ------------------------#
 
 if __name__=='__main__':
 
 	# Provisional: enc for encoding and dec for decoding
-	function = "dec" 
+	function = "enc" 
 
 	if function == "enc":
 		# -------- Main function for encoding --------- #
@@ -37,9 +37,9 @@ if __name__=='__main__':
 		y, cb, cr = RGBtoYUV(r, g, b)
 
 		# We get the hops based on the YUV values
-		y_hops, y_pred = getHops(y, cb, cr, "y", using, mode)
-		cb_hops, cb_pred = getHops(y, cb, cr, "cb", using, mode)
-		cr_hops, cr_pred= getHops(y, cb, cr, "cr", using, mode)
+		y_hops, y_pred = getHops(y, cb, cr, "y", using, mode, npix)
+		cb_hops, cb_pred = getHops(y, cb, cr, "cb", using, mode, npix)
+		cr_hops, cr_pred= getHops(y, cb, cr, "cr", using, mode, npix)
 
 		# We get the image PSNR
 		calculatePSNR(y_pred, y, npix)

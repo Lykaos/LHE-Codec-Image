@@ -3,12 +3,11 @@
 
 import huff, math, struct, os
 from PIL import Image
-from numpy import zeros
 from array import *
 
-# ---------------
-# BINARY ENCODER |
-# ---------------
+# ---------------#
+# BINARY ENCODER #
+# ---------------#
 
 #****************************************************************************
 #	Function getSymbols: This converts a hops list into a symbol list. We will 
@@ -141,6 +140,3 @@ def writeFile(y_sym, cb_sym, cr_sym, mode, first_y_pixel, first_cb_pixel, first_
 	f.write(f2.read())
 	f2.close()
 	f.close()
-
-#def calculatePSNR(file):
-	# TO DO
