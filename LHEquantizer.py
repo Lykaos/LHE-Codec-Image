@@ -4,7 +4,7 @@
 import huff, math, struct, os
 from PIL import Image
 from array import *
-from example import *
+from numpy import zeros
 
 # --------------#
 # LHE QUANTIZER #
@@ -16,12 +16,12 @@ from example import *
 #	We will compute cache ratio for different rmax values, although we will use               #
 #	finally only rmax=25 (which means 2.5f). This function is generic and experimental        #
 #	and this is the cause to compute more things than needed.                                 #
-#	Given a certain h1 value and h0 luminance, the "luminance hop" of hop "i" is stored		  #
-# 	in hn[absolute h1 value][luminance of h0 value]											  #
-#																							  #
+#	Given a certain h1 value and h0 luminance, the "luminance hop" of hop "i" is stored       #
+# 	in hn[absolute h1 value][luminance of h0 value]                                           #
+#                                                                                             #
 #	For example,  h4 (null hop) is always 0, h1 is always hop1 (from 4 to 10), h2 is hop1*r,  #
-#	but this is just the hop. The final luminance of h2 is luminance=(luminance of h0)+hop1*r # 
-#   																						  #
+#	but this is just the hop. The final luminance of h2 is luminance of h0 + hop1*r           #
+#                                                                                             #
 #	hn is, therefore, the array of "hops" in terms of luminance but not the final luminances. #
 #*********************************************************************************************#
 
@@ -56,7 +56,7 @@ def initHopsCache():
 				ratios[0][hop1][hop0][rmax] = pow(percent_range * (255-hop0)/(hop1), 0.33333333) 
 				
 				# r' values for negative hops
-				ratios[1][hop1][hop0][rmax] = pow(percent_range * (hop0)/(hop1), 0.3333333) 	
+				ratios[1][hop1][hop0][rmax] = pow(percent_range * (hop0)/(hop1), 0.33333333) 	
 				
 				# Limits
 				maximum = float(rmax)/10 # If rmax is 25 then max is 2.5f 
@@ -84,12 +84,12 @@ def initHopsCache():
 				h8[hop1][hop0] = h7[hop1][hop0] * ratio_pos 
 
 				# Luminance of negative hops	                        
-				h2[hop1][hop0] =hop1 * ratio_neg 
+				h2[hop1][hop0] = hop1 * ratio_neg 
 				h1[hop1][hop0] = h2[hop1][hop0] * ratio_neg 
 				h0[hop1][hop0] = h1[hop1][hop0] * ratio_neg 
 			
-				# Final color component (luminance or chrominance). depends on hop1
-				# from most negative hop (cache[hop1][hop0][0]) to most possitive hop (cache[hop1][hop0][8])
+				# Final color component (luminance or chrominance). Depends on hop1
+				# From most negative hop (cache[hop1][hop0][0]) to most positive hop (cache[hop1][hop0][8])
 				cache[hop1][hop0][rmax][0] = hop0  - int(h0[hop1][hop0])
 				if (cache[hop1][hop0][rmax][0] <= 0):
 					cache[hop1][hop0][rmax][0] = 1
@@ -126,12 +126,14 @@ def initHopsCache():
 
 	return cache	
 
+
 #*******************************************************************#
 #	Function getImageData: This gets the width and height of an     #
 #   image (in pixels) and the total number of pixels of it.         #
 #	Input: image file                                               #
 #	Output: width (pixels), height (pixels), number of pixels       #
 #*******************************************************************#
+
 def getImageData(filename):
 
 	im = Image.open(filename)
@@ -142,12 +144,13 @@ def getImageData(filename):
 	return width, height, npix
 
 
-#********************************************************************
+#*******************************************************************#
 #	Function RGBtoYUV: This converts three lists (red, blue, green) #
-#   in their equivalent YUV lists.                                  #
+#	in their equivalent YUV lists.                                  #
 #	Input: r [], g [], b []                                         #
-#	Output: y [], cr [], cb []                                      #
-#********************************************************************
+#	Output: y [], cb [], cr []                                      #
+#*******************************************************************#
+
 def RGBtoYUV(r, g, b): # in (0,255) range
 
 	# All of these lists have the same length
@@ -164,13 +167,13 @@ def RGBtoYUV(r, g, b): # in (0,255) range
 	return y, cb, cr
 
 
-#******************************************************************************
-#	Function getYUV: This gets the YUV lists from a given file. First,        #
-#	it gets the RGB lists from the image, converts them to YUV and            #
-#	decimates the chrominance ones based on the YUV mode given.               #
-#	Input: file, YUV mode (it can be 444 (4:4:4), 422 (4:2:2) or 420 (4:2:0)) #
-#	Output: y [], cr [], cb []                                                #
-#******************************************************************************
+#*****************************************************************************#
+#	Function getRGB: This gets the RGB values from a given file and saves     #
+#   them in three lists from a given file.                                    #
+#	Input: file, number of pixels of the file                                 #
+#	Output: r [], g [], b []                                                  #
+#*****************************************************************************#
+
 def getRGB(filename, npix):
 
 	# Getting image pixels RGB values
@@ -193,6 +196,7 @@ def getRGB(filename, npix):
 
 	return r, g, b
 
+
 #*******************************************************************************#
 #	Function getHops: This gets a specific hop list given the YUV ones. The hop #
 #   value results on a kind of average between the previous hop and the         #
@@ -201,7 +205,8 @@ def getRGB(filename, npix):
 #	(it can be "y", "cr" or "cb"), chrominance mode and total number of pixels  #
 #	Output: component hops []                                                   #
 #*******************************************************************************#
-def getHops(y, cb, cr, component, mode, npix):
+
+def getHops(y, cb, cr, component, filename, mode, npix):
 	
 	# Hop1 interval: [4,10]
 	max_hop1 = 10
@@ -214,8 +219,8 @@ def getHops(y, cb, cr, component, mode, npix):
 	hop0 = 0 # Predicted luminance signal
 	hop_number = 4 # Pre-selected hop -> 4 is null hop
 	oc = 0 # Original color
-	pix = 0 # Pixel possition, from 0 to image size        
-	last_small_hop = "false" # indicates if last hop is small. Used for h1 adaptation mechanism
+	pix = 0 # Pixel position, from 0 to image size        
+	last_small_hop = "false" # Indicates if last hop is small. Used for h1 adaptation mechanism
 	rmax = 25 # Ratio used in LHE
 
 	# Depending on the mode we are, the length of the list this method returns changes.

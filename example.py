@@ -19,24 +19,25 @@ from Aux.psnr import *
 if __name__=='__main__':
 
 	# Provisional: enc for encoding and dec for decoding
-	function = "enc" 
+	function = "dec" 
 
 	if function == "enc":
 		# -------- Main function for encoding --------- #
 
 		# We get the image by giving the path and select a chrominance mode
-		image = "lena"
-		using = "input_img/" + image + ".bmp" # we will codify .bmp images, but this is for testing only
+		image = "family"
+		using = "input_img/" + image + ".jpg" # We will codify .bmp images, but this is for testing only
 		mode = 0 # Select mode -> 0 is 4:2:0, 1 is 4:2:2 and 2 is 4:4:4
 
-		# We get the sizes and number of pixels of the image.
+		# We get the width, height and number of pixels of the image
 		width, height, npix = getImageData(using)
 
 		# Getting YUV values
 		r, g, b = getRGB(using, npix)
 		y, cb, cr = RGBtoYUV(r, g, b)
-
+		
 		# We get the hops based on the YUV values
+
 		y_hops, y_pred = getHops(y, cb, cr, "y", using, mode, npix)
 		cb_hops, cb_pred = getHops(y, cb, cr, "cb", using, mode, npix)
 		cr_hops, cr_pred= getHops(y, cb, cr, "cr", using, mode, npix)
@@ -63,11 +64,11 @@ if __name__=='__main__':
 		# and the length of the codified luminance values, so we can separate them from chrominance
 		mode, width, height, first_lum, first_cb, first_cr, lum_len = getData(lhe_file)
 
-		# We need the tuple for saving the image, and the number of pixels for the following functions
+		# We need the tuple for saving the image, and the number of pixels for the following function
 		size = (width, height)
 		npix = width * height
 
-		# We get the chrominance and/or luminance symbols
+		# # We get the chrominance and/or luminance symbols
 		y_sym, cb_sym, cr_sym = getSymbolsLists(lhe_file, npix, lum_len, mode)
 
 		# We get the hops represented by those symbols
@@ -80,8 +81,8 @@ if __name__=='__main__':
 		cb_YUV = hopsToYUV(cb_hops, first_cb, width, height, "cb", mode)
 		cr_YUV = hopsToYUV(cr_hops, first_cr, width, height, "cr", mode)
 
-		# We transform YUV into RGB, but we won't use the simple lists r, g and b here
-		r, g, b, rgb = YUVtoRGB(y_YUV, cb_YUV, cr_YUV)
+		# We transform YUV into the tuple RGB
+		rgb = YUVtoRGB(y_YUV, cb_YUV, cr_YUV)
 
 		# Saving the rgb image to .bmp
 		RGBtoBMP(rgb, size)

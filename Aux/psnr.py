@@ -7,13 +7,14 @@ import math
 # PSNR CALCULATOR #
 # ----------------#
 
-#********************************************************************************
+#*******************************************************************************#
 #   Function getHops: This calculates the Peak Signal to Noise Ratio (PSNR) of  #
 #   the codified image, comparing it to the original one.                       #
 #   Input: predicted luminance array, original luminance array and number of    #
 #   pixels                                                                      #
 #   Output: None, just prints the PSNR                                          #
-#********************************************************************************
+#*******************************************************************************#
+
 def calculatePSNR(y_pred, y, npix):
 
         total_y = 0 # Summatory of squared errors
