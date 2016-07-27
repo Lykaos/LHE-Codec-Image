@@ -25,8 +25,8 @@ if __name__=='__main__':
 		# -------- Main function for encoding --------- #
 
 		# We get the image by giving the path and select a chrominance mode
-		image = "family"
-		using = "input_img/" + image + ".jpg" # We will codify .bmp images, but this is for testing only
+		image = "lena"
+		using = "input_img/" + image + ".bmp" # This is for testing only
 		mode = 0 # Select mode -> 0 is 4:2:0, 1 is 4:2:2 and 2 is 4:4:4
 
 		# We get the width, height and number of pixels of the image
