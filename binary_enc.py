@@ -11,7 +11,7 @@ from array import *
 
 #******************************************************************************#
 #	Function getSymbols: This converts a hops list into a symbol list. We will #
-#   use a cache called distribution, so we know which symbol we need based on  #
+#	use a cache called distribution, so we know which symbol we need based on  #
 #	the upper and the actual hop. It will also include a symbol compressor; we #
 #	will use a symbol 'X' which means a variable '1' (null hops) chain each    #
 #	time, based on the length of '1' chains we got before.                     #

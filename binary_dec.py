@@ -58,7 +58,7 @@ def getData(lhe_file):
 #*****************************************************************************#
 #	Function getSymbolsLists: This returns the luminance and chrominance list #
 #	of symbols given a .lhe file. It also detects the 'X' value in every      #
-#	moment, since it also is the dynamic decompressor.                                                                   #
+#	moment, since it also is the dynamic decompressor.                        #
 #	Input: .lhe file, number of pixels of the image, length of codified       #
 #	luminance and chrominance mode.                                           #
 #	Output: Three symbols lists: luminance and both chrominances.             #

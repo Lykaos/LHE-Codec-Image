@@ -37,7 +37,6 @@ if __name__=='__main__':
 		y, cb, cr = RGBtoYUV(r, g, b)
 		
 		# We get the hops based on the YUV values
-
 		y_hops, y_pred = getHops(y, cb, cr, "y", using, mode, npix)
 		cb_hops, cb_pred = getHops(y, cb, cr, "cb", using, mode, npix)
 		cr_hops, cr_pred= getHops(y, cb, cr, "cr", using, mode, npix)
@@ -68,7 +67,7 @@ if __name__=='__main__':
 		size = (width, height)
 		npix = width * height
 
-		# # We get the chrominance and/or luminance symbols
+		# We get the chrominance and/or luminance symbols
 		y_sym, cb_sym, cr_sym = getSymbolsLists(lhe_file, npix, lum_len, mode)
 
 		# We get the hops represented by those symbols

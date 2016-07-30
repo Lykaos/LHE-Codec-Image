@@ -16,9 +16,9 @@ from example import initHopsCache
 #	Function symbolsToHops: Given a list of symbols, this returns a list of the #
 #	hops they represent. We will use a list of lists called distribution which  #
 #	will work as a cache, since two symbols mean different hops based on their  #
-#	upper symbol. 																#
-#	Input: Symbols list, output image width, component symbols we want and 		#
-#	chrminance mode												                #
+#	upper symbol.                                                               #
+#	Input: Symbols list, output image width, component symbols we want and      #
+#	chrminance mode                                                             #
 #	(it can be "y", "cr" or "cb"), chrominance mode and total number of pixels  #
 #	Output: List of component hops                                              #
 #*******************************************************************************#
@@ -81,10 +81,10 @@ def symbolsToHops(sym_list, width, component, mode):
 #*******************************************************************************#
 #	Function hopsToYUV: This gets a specific YUV list given its hops list.      #
 #   This method is similar to GetHops in LHEquantizer, since it's its inverse   #
-#   function.    															    #
-#	Input: component hops list, original color of the first pixel, width and 	#
-#   height of the resulting image, component YUV we want in return. 			#
-#	chrominance mode 												            #
+#   function.                                                                   #
+#	Input: component hops list, original color of the first pixel, width and    #
+#   height of the resulting image, component YUV we want in return.             #
+#	chrominance mode                                                            #
 #	(it can be "y", "cr" or "cb"), chrominance mode and total number of pixels  #
 #	Output: component hops []                                                   #
 #*******************************************************************************#
