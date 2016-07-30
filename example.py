@@ -41,7 +41,7 @@ if __name__=='__main__':
 		y_hops, y_pred = getHops(y, cb, cr, "y", using, mode, npix)
 		cb_hops, cb_pred = getHops(y, cb, cr, "cb", using, mode, npix)
 		cr_hops, cr_pred= getHops(y, cb, cr, "cr", using, mode, npix)
-
+		
 		# We get the image PSNR
 		calculatePSNR(y_pred, y, npix)
 
@@ -75,7 +75,7 @@ if __name__=='__main__':
 		y_hops = symbolsToHops(y_sym, width, "y", mode)
 		cb_hops = symbolsToHops(cb_sym, width, "cb", mode)
 		cr_hops = symbolsToHops(cr_sym, width, "cr", mode)
-
+		
 		# We get the YUV values represented by those hops
 		y_YUV = hopsToYUV(y_hops, first_lum, width, height, "y", mode)
 		cb_YUV = hopsToYUV(cb_hops, first_cb, width, height, "cb", mode)

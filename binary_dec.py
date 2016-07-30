@@ -58,17 +58,15 @@ def getData(lhe_file):
 #*****************************************************************************#
 #	Function getSymbolsLists: This returns the luminance and chrominance list #
 #	of symbols given a .lhe file. It also detects the 'X' value in every      #
-#	moment if the dynamic coder is enabled, otherwise writes eight '1'        #
-#	symbols per 'X'.                                                          #
+#	moment, since it also is the dynamic decompressor.                                                                   #
 #	Input: .lhe file, number of pixels of the image, length of codified       #
 #	luminance and chrominance mode.                                           #
 #	Output: Three symbols lists: luminance and both chrominances.             #
 #*****************************************************************************#
 
 def getSymbolsLists(lhe_file, npix, lum_len, mode):
-	
-	# This list will always have the number of pixels as length
-	y_sym = [0] * npix
+
+	# -- LUMINANCE AND CHROMINANCE FILES -- #
 
 	# We discard the header and we get 2 files with the Huffman codified luminance and chrominance
 	with open(lhe_file, "rb", 0) as fp:
@@ -99,33 +97,106 @@ def getSymbolsLists(lhe_file, npix, lum_len, mode):
 	chrom_sym = f.read()
 	f.close()
 
-	# We apply the pertinent changes to the 'X' symbol
-	# Remember it means a variable or fixed group of '1' symbols
-	lum_sym = [w.replace('X', '11111111') for w in lum_sym]
-	chrom_sym = [w.replace('X', '11111111') for w in chrom_sym]
-	lum_sym = ''.join(lum_sym)
-	chrom_sym = ''.join(chrom_sym)
+	# We create the lists we are going to work with
+	yuvlum_sym = [0] * len(lum_sym) # Provisional luminance list
+	yuvchrom_sym = [0] * (len(chrom_sym)) # provisional chrominance list
+	y_sym = [0] * npix # Final luminance list
+	ch_sym = [0] * 2*npix # Final chrominances list
 
-	# We save luminance final symbols
-	for i in range(0, npix):
-		y_sym[i] = lum_sym[i]
+	# -- LUMINANCE DYNAMIC DECOMPRESSOR -- #
+
+	# We apply the pertinent changes to the 'X' symbol
+	# Remember it means a variable group of '1' symbols
+	x_length = 8 # Starting x_length
+	in_chain = "false" # If we just got a '1', we are in a chain, so x_length doesnt decrement
+
+	for i in range(0, len(lum_sym)):
+
+		# If we get 'X', we change it for the correct number of '1' symbols in a row 
+		if lum_sym[i] == 'X':
+			in_chain = "true" # 'X' is just a group of '1'
+			chain = ''.join(['1'] * x_length) # We create the '1' chain
+			yuvlum_sym[i] = chain # And save it in the list
+			x_length = x_length + 2 # Finally, we increase x_length for the next 'X'
+
+		# If we get '1', we save it and decrease x_length if it's the first '1' we get
+		elif (lum_sym[i] == '1'):
+			yuvlum_sym[i] = '1'
+			if (in_chain == "false"): # '1' after a symbol which is not 'X' or '1'
+				x_length = int(math.ceil(float(x_length) / 2))
+			in_chain = "true"
+
+		# Otherwise, save the symbol and we stop being in a '1' chain
+		else:
+			yuvlum_sym[i] = lum_sym[i]
+			in_chain = "false" 
+
+	# Resetting variables for chrominance
+	x_length = 8
+	in_chain = "false"
+
+	# -- CHROMINANCE DYNAMIC DECOMPRESSOR -- #
+
+	# Same bucle as before, but with a separator of chrominances
+	for i in range(0, len(chrom_sym)):
+
+		if chrom_sym[i] == 'X':
+			in_chain = "true"
+			chain = ''.join(['1'] * x_length) 
+			yuvchrom_sym[i] = chain
+			x_length = x_length + 2
+
+		elif (chrom_sym[i] == '1'):
+			yuvchrom_sym[i] = '1'
+			if (in_chain == "false"):
+				x_length = int(math.ceil(float(x_length) / 2))
+			in_chain = "true"
+
+		# '0' is the separator, so we reset variables
+		elif (chrom_sym[i] == '0'):
+			yuvchrom_sym[i] = '0'
+			x_length = 8
+			in_chain = "false"
+			continue
+
+		else:
+			yuvchrom_sym[i] = chrom_sym[i]
+			in_chain = "false"
+
+	# We join the lists so we can work with them
+	yuvlum_sym = ''.join(yuvlum_sym)
+	yuvchrom_sym = ''.join(yuvchrom_sym)
+
+	# Luminance saving
+	for i in range(0, len(yuvlum_sym)):
+		y_sym[i] = int(yuvlum_sym[i])
+
+	k = 0 # Position in the final list of chrominance symbols
+
+	# Chrominance saving
+	for i in range(0, len(yuvchrom_sym)):
+		if (int(yuvchrom_sym[i]) != 0): # We dont save the separator
+			ch_sym[k] = int(yuvchrom_sym[i])
+			k = k + 1 
+		else:
+			continue # If we get the separator, we dont increment k
 
 	# If we are in 4:4:4, all lists have the same length, the number of pixels
 	# If we are in 4:2:2, chrominance lists have their length halved
 	# If we are in 4:2:0, luminance list is 4 times longer than chrominance ones
-	if (mode == 0):
+	if (mode == 0): # 4:2:0
 		npix = int(npix/4)
-	elif (mode == 1):
+	elif (mode == 1): # 4:2:2
 		npix = int(npix/2)
 
 	# We assign the right length to chrominance lists
 	cb_sym = [0] * npix
 	cr_sym = [0] * npix 
-
+	
 	# We save both chrominance final symbols
 	for i in range(0, npix):
-			cb_sym[i] = chrom_sym[i]
-			cr_sym[i] = chrom_sym[npix+i]
+		cb_sym[i] = ch_sym[i]
+		cr_sym[i] = ch_sym[npix+i]
 
 	# We delete the files we dont want anymore.
 	os.remove("output_lhe/out-huffman_lum.lhe")

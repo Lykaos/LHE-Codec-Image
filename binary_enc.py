@@ -13,8 +13,7 @@ from array import *
 #	Function getSymbols: This converts a hops list into a symbol list. We will #
 #   use a cache called distribution, so we know which symbol we need based on  #
 #	the upper and the actual hop. It will also include a symbol compressor; we #
-#	will use a symbol 'X' which means a variable '1' (null hops) chain. If we  #
-#	have the dynamic compressor enabled, 'X' will mean a different chain each  #
+#	will use a symbol 'X' which means a variable '1' (null hops) chain each    #
 #	time, based on the length of '1' chains we got before.                     #
 #	Input: Hops list, width, height and number of pixels of the image.         #
 #	Output: Symbols list                                                       #
@@ -23,8 +22,15 @@ from array import *
 def getSymbols(hops, width, height, npix):
 
 	sym = [0] * npix # Symbols list
-	cnt = 0 # Counter for '1' chains
 	lock = 0 # So we can break the bucle when mode is 4:2:2 or 4:2:0
+
+	# Dynamic compressor variables
+	cnt = 0 # Counter for '1' chains
+	x_length = 8 # 'X' will start meaning eight '1' symbols
+
+	# This means we are in a chain which some of their symbols already were
+	# compressed with 'X'. This is a long chain and we dont reduce x_length
+	in_chain = "false" 
 
 	# Here, we will create a list of lists for every posibility of upper hop. We will use a symbol '2' which means that this
 	# hop equals the upper one. If we know that the actual symbol is different than '2', we can discard the upper hop 
@@ -49,38 +55,56 @@ def getSymbols(hops, width, height, npix):
 
 			k = i*width + j # This is the pixel (hop) we are analyzing.
 
+			# This interrupts the bucle if we are in 4:2:2 or 4:2:0
 			if (k == len(hops)):
 				lock = 1
 				break
 
-			if (hops[k] == 4): # If the hop is null, write '1' or 'X' depending on how many null hops are behind this one.
+			# If the hop is null, write '1' or 'X' depending on how many null hops are behind this one
+			if (hops[k] == 4): 
 				cnt = cnt + 1 # We increase the length of the chain
-				if (cnt < 8): 
-					sym[k] = 1 # This symbol '1' will be removed if the chain has a length >= 8
+				if (cnt < x_length): 
+					sym[k] = 1 # This symbol '1' will be removed if the chain has a length >= x_length
 				else:
-					sym[k-7] = 'X' # If chain length reaches 8, we write 'X'.
-					cnt = 0
-					for p in range(0, 7): 
-						sym[k-p] = 0 # We clear all the symbols '1' we wrote in this chain.
+					sym[k-(x_length-1)] = 'X' # If chain length reaches 8, we write 'X'
+					cnt = 0 # Reseting counter
+					in_chain = "true" # We keep analyzing the chain
+					for p in range(0, x_length-1): 
+						sym[k-p] = 0 # We clear all the symbols '1' we wrote in this chain
+					x_length = x_length + 2 # We increase the length for next chain
+					
 				continue
 
-			elif (i == 0): # If we are analyzing the first row, there is no upper hop, so we use the original distribution.
+			# If we are analyzing the first row, there is no upper hop, so we use the original distribution
+			elif (i == 0): 
 				sym[k] = distribution[0][hops[k]]
-				if (cnt != 0): # If we get a != '1' symbol, we reset the counter and save it in an array.
-					cnt = 0 # Reset 
+				if (cnt != 0): # If we get a != '1' symbol, we reset the counter and save it in an array
+					cnt = 0 # Reset
+					if (in_chain == "false"): 
+						x_length = int(math.ceil(float(x_length) / 2)) # We reduce the length of the symbol 'X'
+				in_chain = "false" # We are not anymore in a chain
 				continue
 
-			elif (hops[k] == hops[k-width]): # If the upper symbol equals this one (and this one is not '1'), write '2'.
+			# If the upper symbol equals this one (and this one is not '1'), write '2'
+			elif (hops[k] == hops[k-width]): 
 				sym[k] = 2
 				if (cnt != 0): # Same as before
 					cnt = 0
+					if (in_chain == "false"):
+						x_length = int(math.ceil(float(x_length) / 2))
+				in_chain = "false"
 				continue
-			else: 
-				# If this hop is different than the upper one, we check our distribution for the correct symbol
+
+			# If this hop is different than the upper one, we check our distribution for the correct symbol
+			else:				
 				sym[k] = distribution[hops[k-width]+1][hops[k]] 
 				if (cnt != 0): # Same as before
 					cnt = 0
+					if (in_chain == "false"):
+						x_length = int(math.ceil(float(x_length) / 2))
+				in_chain = "false"
 				continue
+
 		if (lock == 1):
 			break
 
@@ -121,9 +145,9 @@ def writeFile(y_sym, cb_sym, cr_sym, mode, first_y_pixel, first_cb_pixel, first_
 
   	for item in cb_sym: # We write the not codified chrominance (cb)
   		f.write(str(item))
+  	f.write('0') # This avoids a bug and helps to separate both chrominances
   	for item in cr_sym: # We write the not codified chrominance (cr)
   		f.write(str(item))
-  	f.write('1') # This avoids a bug when we use black and white images and all symbols are 'X'
   	f.close()
 
 	enc = huff.Encoder("output_lhe/payload_chrom.lhe") # We codify both chrominances with Huffman
