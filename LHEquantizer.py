@@ -12,16 +12,16 @@ from numpy import zeros
 
 #*********************************************************************************************#
 #	Function initHopsCache: # Initializes pre-computed hop values.                            #
-#   This is a cache of ratio ("r") to avoid pow functions                                     #
+#	This is a cache of ratio ("r") to avoid pow functions                                     #
 #	We will compute cache ratio for different rmax values, although we will use               #
 #	finally only rmax=25 (which means 2.5f). This function is generic and experimental        #
 #	and this is the cause to compute more things than needed.                                 #
 #	Given a certain h1 value and h0 luminance, the "luminance hop" of hop "i" is stored       #
-# 	in hn[absolute h1 value][luminance of h0 value]                                           #
-#                                                                                             #
+#	in hn[absolute h1 value][luminance of h0 value]                                           #
+#	                                                                                          #
 #	For example,  h4 (null hop) is always 0, h1 is always hop1 (from 4 to 10), h2 is hop1*r,  #
 #	but this is just the hop. The final luminance of h2 is luminance of h0 + hop1*r           #
-#                                                                                             #
+#	                                                                                          #
 #	hn is, therefore, the array of "hops" in terms of luminance but not the final luminances. #
 #*********************************************************************************************#
 
@@ -129,7 +129,7 @@ def initHopsCache():
 
 #*******************************************************************#
 #	Function getImageData: This gets the width and height of an     #
-#   image (in pixels) and the total number of pixels of it.         #
+#	image (in pixels) and the total number of pixels of it.         #
 #	Input: image file                                               #
 #	Output: width (pixels), height (pixels), number of pixels       #
 #*******************************************************************#
@@ -169,7 +169,7 @@ def RGBtoYUV(r, g, b): # in (0,255) range
 
 #*****************************************************************************#
 #	Function getRGB: This gets the RGB values from a given file and saves     #
-#   them in three lists from a given file.                                    #
+#	them in three lists from a given file.                                    #
 #	Input: file, number of pixels of the file                                 #
 #	Output: r [], g [], b []                                                  #
 #*****************************************************************************#
@@ -199,7 +199,7 @@ def getRGB(filename, npix):
 
 #*******************************************************************************#
 #	Function getHops: This gets a specific hop list given the YUV ones. The hop #
-#   value results on a kind of average between the previous hop and the         #
+#	value results on a kind of average between the previous hop and the         #
 #	upper-right hop, unless the analyzed pixel doesnt have both of them.        #
 #	Input: y [], cr [], cb [], component hops we want in return                 #
 #	(it can be "y", "cr" or "cb"), chrominance mode and total number of pixels  #
