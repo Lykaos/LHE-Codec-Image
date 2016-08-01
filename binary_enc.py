@@ -1,8 +1,7 @@
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
-import Aux.huff as huff
-import math, struct, os
+import huff, math, struct, os
 from PIL import Image
 from array import *
 

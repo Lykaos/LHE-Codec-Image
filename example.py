@@ -1,7 +1,7 @@
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
-import huff, math, struct, os
+import math, struct, os
 from Pillow import PIL
 from numpy import zeros
 from array import *
@@ -9,7 +9,6 @@ from LHEquantizer import *
 from binary_enc import *
 from binary_dec import *
 from image_dec import *
-from Aux.huff import *
 from Aux.psnr import *
 
 # ------------------------#
