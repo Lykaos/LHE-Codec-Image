@@ -1,0 +1,1 @@
+Here is the output image will be saved, with the name *output-image.bmp*
