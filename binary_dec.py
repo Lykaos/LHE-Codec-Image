@@ -2,7 +2,7 @@
 # Author: Eduardo Rodes Pastor
 
 import huff, math, struct, os
-from PIL import Image
+
 from array import *
 
 # ---------------#

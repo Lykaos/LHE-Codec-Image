@@ -9,7 +9,7 @@ from LHEquantizer import *
 from binary_enc import *
 from binary_dec import *
 from image_dec import *
-from Aux.psnr import *
+from Auxiliary.psnr import *
 
 # ------------------------#
 # CODING/DECODING EXAMPLE #
@@ -18,7 +18,7 @@ from Aux.psnr import *
 if __name__=='__main__':
 
 	# Provisional: enc for encoding and dec for decoding
-	function = "dec" 
+	function = "enc" 
 
 	if function == "enc":
 		# -------- Main function for encoding --------- #
