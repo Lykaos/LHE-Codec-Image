@@ -25,8 +25,13 @@ You can learn more about LHE in this article: *http://oa.upm.es/37459/1/INVE_MEM
 ## How to use
 
 You will need the numpy and PIL modules for Python. If you dont have it installed, type *sudo apt-get install python-numpy*.
-If you are using Windows, you can get numpy from this link *http://www.mediafire.com/download/t5d9abkakhi22ye/NUMPY+1.6.1.rar*
-And PIL doesn't work on Windows, so you need to get it here *http://www.pythonware.com/products/pil/#pil117* (32 bits) 
+
+If you are using Windows, you can get numpy from this link: *http://www.mediafire.com/download/t5d9abkakhi22ye/NUMPY+1.6.1.rar*
+
+And PIL doesn't work on Windows, so you need to get it here:
+
+*http://www.pythonware.com/products/pil/#pil117* (32 bits) 
+
 WARNING: Yoy probably need to execute the PIL installer in administrator mode
 
 Then just open example.py with IDLE if you're using Windows or write in terminal *python example.py* if you're using Linux. 
