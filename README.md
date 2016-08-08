@@ -66,7 +66,7 @@ The program will ask you what do you want to do. Type *enc* for encoding or *dec
 
 ### Encoding
 
-Once you selected encoding, the program will ask you the chrominance mode you want and the image you want to work with. This codec only works with .bmp images, be sure to select one. You will know when the program finishes the encoding.
+Once you selected encoding, the program will ask you the chrominance mode you want and the image you want to work with. This codec only works with .bmp images which are saved in the input_img folder, be sure to save and select one from there. You will know when the program finishes the encoding.
 
 ### Decoding
 
