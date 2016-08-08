@@ -1,8 +1,8 @@
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
-
 import math, struct, os
+
 from PIL import Image
 from array import *
 from numpy import zeros

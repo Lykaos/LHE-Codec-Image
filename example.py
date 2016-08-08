@@ -36,16 +36,18 @@ if __name__=='__main__':
 				print ""
 				mode = int(raw_input("Select the chrominance mode. Please, type 0 for 4:2:0, 1 for 4:2:2 and 2 for 4:4:4: ")) # Select mode -> 0 is 4:2:0, 1 is 4:2:2 and 2 is 4:4:4
 			except:
+				print ""
+				print "ERROR: Chrominance mode must be an integer between 0 and 2."
 				mode = -1 # So we can keep asking the user until we get a valid value
 
-		valid_image = "false" # Image needs to be in the input_img folder and have .bmp format
+		valid_image = "false" # So we can keep asking the user until we get an existing image. This means if the image exists
 
 		# SELECT IMAGE #
 		while (valid_image == "false"):
-			# We get the image by giving the path and select a chrominance mode
+			# We get the image by giving the relative path
 			print ""
-			image = raw_input("Select the image. Please, type the name (without extension) of the .bmp image you want to encode. It must be in the input_img folder: ")
-			using = "input_img/" + image + ".bmp" # This is for testing only
+			image = raw_input("Select the image. Please, type the name (with extension) of the image you want to encode. It must be in the input_img folder: ")
+			using = "input_img/" + image
 
 			try:
 				# We get the width, height and number of pixels of the image
@@ -54,8 +56,7 @@ if __name__=='__main__':
 				print ""
 			except:
 				print ""
-				print "ERROR: Image does not exist or it is not saved in the input_img folder."
-				valid_image = "false"
+				print "ERROR: Image cant be loaded or it is not saved in the input_img folder."
 
 		# Getting YUV values
 		r, g, b = getRGB(using, npix)
@@ -83,22 +84,17 @@ if __name__=='__main__':
 
 		# Getting the path of the .lhe file
 		lhe_file = "output_lhe/lhe_file.lhe"
-		
-		valid_lhe_file = "false" # .lhe file needs to exist and be in the output_lhe folder 
 
-		# GETTING LHE FILE #
-		while (valid_lhe_file == "false"):
-			try:
-				# With that file, we get the chrominance mode, size values, first value of every YUV list
-				# and the length of the codified luminance values, so we can separate them from chrominance
-				mode, width, height, first_lum, first_cb, first_cr, lum_len = getData(lhe_file)
-				valid_lhe_file = "true"
-			except:
-				print ""
-				print "ERROR: .lhe file does not exist or it is not saved in the output_lhe folder. Exiting..."
-				print ""
-				valid_lhe_file = "false"
-				sys.exit(0)
+		# GETTING LHE FILE INFORMATION #
+		try:
+			# With that file, we get the chrominance mode, size values, first value of every YUV list
+			# and the length of the codified luminance values, so we can separate them from chrominance
+			mode, width, height, first_lum, first_cb, first_cr, lum_len = getData(lhe_file)
+		except:
+			print ""
+			print "ERROR: .lhe file is invalid or it is not saved in the output_lhe folder. Exiting..."
+			print ""
+			sys.exit(0)
 
 
 		# We need the tuple for saving the image, and the number of pixels for the following function
@@ -125,5 +121,6 @@ if __name__=='__main__':
 		RGBtoBMP(rgb, size)
 
 	elif function == "exit":
+		print ""
 		sys.exit(1)
 

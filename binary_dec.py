@@ -1,8 +1,9 @@
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
-import huff, math, struct, os
+import math, struct, os
 
+import Auxiliary.huff as huff
 from array import *
 
 # ---------------#
