@@ -53,8 +53,11 @@ You can learn more about LHE in this article: *http://oa.upm.es/37459/1/INVE_MEM
   sudo pip install pillow
   ```
 
-3. Go to the path where example.py is and execute it with *python example.py*
+3. Go to the path where example.py is and execute it with the command:
 
+  ```
+  python example.py
+  ```
 
 
 ## How to use (All)
