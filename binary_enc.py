@@ -191,3 +191,6 @@ def writeFile(y_sym, cb_sym, cr_sym, mode, first_y_pixel, first_cb_pixel, first_
 	os.remove("output_lhe/huffman_chrom.lhe")
 	os.remove("output_lhe/payload_lum.lhe")
 	os.remove("output_lhe/payload_chrom.lhe")
+
+	print ".lhe file created succesfully"
+	print ""

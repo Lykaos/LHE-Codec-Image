@@ -2,7 +2,7 @@
 # Author: Eduardo Rodes Pastor
 
 
-import math, struct, os
+import math, struct, os, sys
 from PIL import Image
 from array import *
 from numpy import zeros
@@ -136,6 +136,7 @@ def initHopsCache():
 #*******************************************************************#
 
 def getImageData(filename):
+
 
 	im = Image.open(filename)
 	width = im.size[0]

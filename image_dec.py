@@ -257,4 +257,8 @@ def RGBtoBMP(rgb, size):
 	im.putdata(rgb)
 
 	# We save it as output-image.bmp
-	im.save("output_lhe/images/output-image.bmp", 'BMP')
+	im.save("output_img/output-image.bmp", 'BMP')
+
+	print ""
+	print "Output image created succesfully"
+	print ""
