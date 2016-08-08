@@ -28,7 +28,7 @@ You can learn more about LHE in this article: *http://oa.upm.es/37459/1/INVE_MEM
 
 1. Install Python 2.7 and the IDLE Editor if you dont have them in your computer.
 
-2. Open a command prompt (cmd) and go to the path you installed Python. Go to the "Scripts" subfolder and type:
+2. Now we need to install two modules: numpy and pillow. Pillow is an improved version of the module PIL (contained in it), which works with images (opening, loading, getting RGB values, etc). Open a command prompt (cmd) and go to the path you installed Python. Go to the "Scripts" subfolder and type:
 
   ```
   pip install numpy
