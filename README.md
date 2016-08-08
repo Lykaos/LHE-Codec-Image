@@ -46,7 +46,9 @@ You can learn more about LHE in this article: *http://oa.upm.es/37459/1/INVE_MEM
 2. Open a new terminal and type:
 
 *sudo apt-get install python-pip*
+
 *sudo pip install numpy*
+
 *sudo pip install pillow*
 
 3. Go to the path where example.py is and execute it with *python example.py*
