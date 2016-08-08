@@ -30,10 +30,10 @@ You can learn more about LHE in this article: *http://oa.upm.es/37459/1/INVE_MEM
 
 2. Open a command prompt (cmd) and go to the path you installed Python. Go to the "Scripts" subfolder and type:
 
-  ...
-  *pip install numpy*
-  *pip install pillow*
-  ...
+  ```
+  pip install numpy
+  pip install pillow
+  ```
 
 3. Open the IDLE editor with example.py and execute it with the F5 key or the Run menu.
 
@@ -47,11 +47,11 @@ You can learn more about LHE in this article: *http://oa.upm.es/37459/1/INVE_MEM
 
 2. Open a new terminal and type:
 
-  ...
-  *sudo apt-get install python-pip*
-  *sudo pip install numpy*
-  *sudo pip install pillow*
-  ...
+  ```
+  sudo apt-get install python-pip
+  sudo pip install numpy
+  sudo pip install pillow
+  ```
 
 3. Go to the path where example.py is and execute it with *python example.py*
 
