@@ -1,9 +1,13 @@
+"""
+
+This module gets the symbols lists from the .lhe file of the coded image.
+
+"""
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
-import math, struct, os
+import huff, math, struct, os
 
-import Auxiliary.huff as huff
 from array import *
 
 # ---------------#
@@ -22,7 +26,20 @@ from array import *
 #*****************************************************************************#
 
 def getData(lhe_file):
+	"""Returns some values from the .lhe file header that will be useful for the decoding.
 
+	Parameters: .lhe file (string)
+
+	Output: In order: chrominance mode (integer, 0 for 4:2:0, 1 for 4:2:2 
+	or 2 for 4:4:4), image width and height (integers), y, cb and cr values
+	of the first pixel of the image (integers from 0 to 255), length of 
+	the codified luminance (integer) so we know when the codified chrominance
+	starts.
+
+	Exceptions: This will throw an exception if the .lhe file is not in the 
+	output_lhe folder.
+
+	"""
 	fp = open(lhe_file, "rb")
 	data = fp.read()
 
@@ -66,7 +83,16 @@ def getData(lhe_file):
 #*****************************************************************************#
 
 def getSymbolsLists(lhe_file, npix, lum_len, mode):
+	"""Returns the codified symbols lists of a given .lhe file.
 
+	Parameters: .lhe file (string), number of pixels if the image (integer),
+	length of codified luminance (integer) and chrominance mode (integer, 
+	0 for 4:2:0, 1 for 4:2:2 or 2 for 4:4:4).
+
+	Exceptions: This will throw an exception if the .lhe file is not in the 
+	output_lhe folder.
+
+	"""
 	# -- LUMINANCE AND CHROMINANCE FILES -- #
 
 	# We discard the header and we get 2 files with the Huffman codified luminance and chrominance

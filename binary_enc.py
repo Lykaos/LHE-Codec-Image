@@ -1,9 +1,14 @@
+"""
+
+This module writes a .lhe file with some data, given the hops lists of the image.
+
+"""
+
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
-import math, struct, os
+import huff, math, struct, os
 
-import Auxiliary.huff as huff
 from array import *
 
 # ---------------#
@@ -21,7 +26,17 @@ from array import *
 #******************************************************************************#
 
 def getSymbols(hops, width, height, npix):
+	"""Returns a list of symbols given their respective hops list.
 
+	This function also uses the dynamic compressor: we have a 'X' symbol which
+	will mean a variable '1' chain of symbols.
+
+	Parameters: Hops list (integers from 0 to 8), width and height of the image
+	(integer), number of pixels of it (integer).
+
+	Exceptions: This function does not throw an exception.
+
+	"""
 	sym = [0] * npix # Symbols list
 	lock = 0 # So we can break the bucle when mode is 4:2:2 or 4:2:0
 
@@ -127,7 +142,15 @@ def getSymbols(hops, width, height, npix):
 #******************************************************************************#
 
 def writeFile(y_sym, cb_sym, cr_sym, mode, first_y_pixel, first_cb_pixel, first_cr_pixel, width, height): # This will write the image size and the 3 codified symbols lists in a file.
+	"""Writes a .lhe file with some data for the decoder.
 
+	Parameters: y, cb and cr symbols lists (integer values from 1 to 9), y, cb and cr
+	value of the first pixel of the image (integer values from 0 to 255), width and 
+	height of the image (integer).
+
+	Exceptions: This function does not throw an exception.
+
+	"""
 	# -- PAYLOAD -- #
 
 	f = open("output_lhe/" + "payload_lum" + ".lhe", "wb")
@@ -192,6 +215,3 @@ def writeFile(y_sym, cb_sym, cr_sym, mode, first_y_pixel, first_cb_pixel, first_
 	os.remove("output_lhe/huffman_chrom.lhe")
 	os.remove("output_lhe/payload_lum.lhe")
 	os.remove("output_lhe/payload_chrom.lhe")
-
-	print ".lhe file created succesfully"
-	print ""

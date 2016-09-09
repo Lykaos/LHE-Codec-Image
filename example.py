@@ -1,3 +1,8 @@
+"""
+
+Example and main function of the program.
+
+"""
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
@@ -16,7 +21,6 @@ from Auxiliary.psnr import *
 # ------------------------#
 
 if __name__=='__main__':
-
 	# User can write enc for encoding, dec for decoding and exit for...exiting.
 	function = "none"
 	
@@ -123,4 +127,3 @@ if __name__=='__main__':
 	elif function == "exit":
 		print ""
 		sys.exit(1)
-

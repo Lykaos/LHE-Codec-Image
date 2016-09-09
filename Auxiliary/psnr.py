@@ -1,3 +1,8 @@
+"""
+
+This module calculates the Peak Signal to Noise Ratio (PSNR) of a codified image.
+
+"""
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
@@ -16,7 +21,18 @@ import math
 #*******************************************************************************#
 
 def calculatePSNR(y_pred, y, npix):
+        """Prints the PSNR of the image luminance lists given.
 
+        It compares the predicted luminance list with the original one and gets
+        the total error between them.
+
+        Parameters: predicted luminance (integer list with values from 0 to 255), 
+        original luminance (integer list with values from 0 to 255), number of 
+        pixels of the image (integer)
+
+        Exceptions: This function does not throw an exception.
+
+        """
         total_y = 0 # Summatory of squared errors
 
         for i in range(0, len(y)): 

@@ -1,3 +1,8 @@
+"""
+
+Huffman codec (encoder and decoder).
+
+"""
 import os
 import marshal
 import cPickle

@@ -1,8 +1,12 @@
+"""
+
+This module gets and saves the decoded image, given its symbols lists.
+
+"""
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
 import math, struct, os
-
 from PIL import Image
 from array import *
 from numpy import zeros
@@ -25,6 +29,15 @@ from example import initHopsCache
 #*******************************************************************************#
 
 def symbolsToHops(sym_list, width, component, mode): 
+	"""Transforms a symbols list into its respective hops one.
+
+	Parameters: symbols list (integers from 0 to 255), width and
+	height of the image (integers), chrominance mode (integer, 
+	0 for 4:2:0, 1 for 4:2:2 or 2 for 4:4:4)
+
+	Exceptions: This function does not throw an exception.
+
+	"""
 
 	sym_list = ['11111111' if e == 'X' else str(e) for e in sym_list]
 	sym_list = ''.join(sym_list) # We get all the symbols in a big string
@@ -91,7 +104,17 @@ def symbolsToHops(sym_list, width, component, mode):
 #*******************************************************************************#
 
 def hopsToYUV(hops, oc, width, height, component, mode):
+	"""Returns the y, cb and cr values (YUV) given their hops list.
 
+	Parameters: hops list (integers from 0 to 8), first value of the 
+	component we want in the first pixel (integer from 0 to 255), width and
+	height of the image (integers), component we want to get data about
+	(string), chrominance mode (integer, 0 for 4:2:0, 1 for 4:2:2 or 
+	2 for 4:4:4).
+
+	Exceptions: This function does not throw an exception.
+
+	"""
 	# Hop1 interval: [4,10]
 	max_hop1 = 10
 	min_hop1 = 4
@@ -226,7 +249,13 @@ def hopsToYUV(hops, oc, width, height, component, mode):
 #*******************************************************************#
 
 def YUVtoRGB(y, cb, cr):
+	"""Gets the RGB values from the YUV ones.
 
+	Parameters: y, cb and cr (YUV lists, integers from 0 to 255).
+
+	Exceptions: This function does not throw an exception.
+
+	"""
 	# All of these have the same length
 	r = [0] * len(y)
 	g = [0] * len(y)
@@ -252,14 +281,18 @@ def YUVtoRGB(y, cb, cr):
 #*******************************************************************#
 
 def RGBtoBMP(rgb, size):
+	"""Saves the new image in the specified subfolder given its RGB values.
 
+	Parameters: R, G and B values (integer lists with values from 0 to 255),
+	size of the image (integer)
+
+	Exceptions: This function will throw an exception if the specified folder
+	does not exist.
+
+	"""
 	# New image with our rgb values
 	im = Image.new('RGB', size) 
 	im.putdata(rgb)
 
 	# We save it as output-image.bmp
-	im.save("output_img/output-image.bmp", 'BMP')
-
-	print ""
-	print "Output image created succesfully"
-	print ""
+	im.save("output_lhe/images/output-image.bmp", 'BMP')

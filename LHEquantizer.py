@@ -1,8 +1,12 @@
+"""
+
+This module gets the hops lists of a .bmp image file given.
+
+"""
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
 import math, struct, os
-
 from PIL import Image
 from array import *
 from numpy import zeros
@@ -27,7 +31,15 @@ from numpy import zeros
 #*********************************************************************************************#
 
 def initHopsCache():
-		
+
+	"""Initializes a precalculated data cache in order to reduce processing.
+
+	Returns that cache (4-dimension list) but only 3 of them will be used. 
+	This function can not throw exceptions, since it has no arguments. 
+	These values will be used when transforming YUV to Hops. 
+
+	"""
+
 	h1range = 20 # Although h1range is only from 4 to 10, we will fill more possible values in the pre-computed hops
 	
 	h0 = zeros((h1range, 256))
@@ -136,8 +148,14 @@ def initHopsCache():
 #*******************************************************************#
 
 def getImageData(filename):
+	"""Returns width, height and number of pixels of the image given.
 
+	Parameters: Image file.
 
+	Exceptions: This will throw an exception if the image is not in the 
+	input_img folder.
+
+	"""
 	im = Image.open(filename)
 	width = im.size[0]
 	height = im.size[1]
@@ -154,7 +172,14 @@ def getImageData(filename):
 #*******************************************************************#
 
 def RGBtoYUV(r, g, b): # in (0,255) range
+	"""Transforms an image RGB components into YUV.
 
+	Parameters: R, G and B values of an image (integer lists with values 
+	from 0 to 255).
+
+	This function does not throw an exception.
+
+	"""
 	# All of these lists have the same length
 	y = [0] * len(r) 
 	cb = [0] * len(r) 
@@ -177,7 +202,14 @@ def RGBtoYUV(r, g, b): # in (0,255) range
 #*****************************************************************************#
 
 def getRGB(filename, npix):
+	"""Returns R, G and B values of an image given.
 
+	Parameters: Image file (string), number of pixels of it (integer).
+
+	Exceptions: This will throw an exception if the image is not in the 
+	input_img folder.
+
+	"""
 	# Getting image pixels RGB values
 	im = Image.open(filename)
 	rgb_im = im.convert('RGB')
@@ -209,7 +241,16 @@ def getRGB(filename, npix):
 #*******************************************************************************#
 
 def getHops(y, cb, cr, component, filename, mode, npix):
-	
+	"""Returns the hops lists for a given image luminance and chrominance values.
+
+	Parameters: Y, Cb, Cr (YUV) values (integer lists with values from 0 to 255),
+	component used to get hops (string), image file (string),
+	chrominance mode (integer, 0 for 4:2:0, 1 for 4:2:2 or 2 for 4:4:4), number 
+	of pixels of the image (integer).
+
+	This function does not throw an exception.
+
+	"""	
 	# Hop1 interval: [4,10]
 	max_hop1 = 10
 	min_hop1 = 4
