@@ -6,7 +6,8 @@ This module gets the symbols lists from the .lhe file of the coded image.
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
-import huff, math, struct, os
+import Auxiliary.huff as huff
+import math, struct, os
 
 from array import *
 

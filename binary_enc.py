@@ -7,7 +7,8 @@ This module writes a .lhe file with some data, given the hops lists of the image
 # LHE Codec
 # Author: Eduardo Rodes Pastor
 
-import huff, math, struct, os
+import Auxiliary.huff as huff
+import math, struct, os
 
 from array import *
 
